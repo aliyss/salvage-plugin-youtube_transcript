@@ -56,10 +56,13 @@ The plugin talks to the helper over stdin/stdout using the small SDK in
 
 ## Releasing
 
-Push a tag such as `v0.1.1`. The **Release plugin** workflow builds the bundle,
-runs the tests, and publishes a GitHub release with `plugin.js` and
-`manifest.json` attached. The store reads that release, so keep the version in
-`manifest.json` in step with the tag.
+Every push to `master` builds the bundle, runs the tests, and publishes a
+GitHub release **in this repository**, tagged `v<version>` from `manifest.json`,
+with `plugin.js` and `manifest.json` attached. No tag push is needed.
+
+Bump `version` in `manifest.json` when a commit should reach installed copies;
+a push with the same version refreshes that release's assets without changing
+the version the store and update check report.
 
 Repositories tagged with the GitHub topic **`salvage-plugin`** appear in the
 store automatically, sorted by stars.

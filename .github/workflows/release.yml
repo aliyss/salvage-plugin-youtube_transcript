@@ -1,9 +1,9 @@
-name: Release plugin
+name: Build plugin
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - master
   workflow_dispatch:
 
 permissions:
@@ -31,10 +31,20 @@ jobs:
       - name: Build
         run: bun run build
 
+      # The release lives in this repository. Its tag is the manifest version,
+      # so a version bump creates a new release and any other commit refreshes
+      # the assets of the current one.
       - name: Publish release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            manifest.json
-            dist/plugin.js
-          generate_release_notes: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="v$(node -p "require('./manifest.json').version")"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" manifest.json dist/plugin.js --clobber
+          else
+            gh release create "$tag" manifest.json dist/plugin.js \
+              --target "$GITHUB_SHA" \
+              --title "$tag" \
+              --generate-notes \
+              --latest
+          fi
