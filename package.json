@@ -1,0 +1,17 @@
+{
+  "name": "salvage-plugin-youtube_transcript",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Reads a YouTube video's transcript for the Salvage Helper.",
+  "scripts": {
+    "build": "bun build src/plugin.ts --target=bun --outfile dist/plugin.js",
+    "dev": "bun src/plugin.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "typescript": "^5.4.5"
+  }
+}
